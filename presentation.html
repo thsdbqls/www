@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOOK FOREST - Project Presentation</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --surface-2: #f1f3f9;
+    --text: #181c32;
+    --sub: #6b7280;
+    --line: #e5e7eb;
+    --primary: #4f46e5;
+    --primary-dark: #3730a3;
+    --accent: #0f172a;
+    --danger: #dc2626;
+    --shadow: 0 12px 40px rgba(15, 23, 42, 0.08);
+    --radius: 20px;
+  }
+
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+
+  body {
+    font-family: "Pretendard", "Noto Sans KR", sans-serif;
+    font-size: 16px; font-weight: 400; line-height: 1.6;
+    color: var(--text); background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Slide ── */
+  .slide {
+    min-height: 100vh; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 80px 28px; scroll-snap-align: start;
+  }
+
+  .inner { max-width: 1080px; width: 100%; margin: 0 auto; text-align: center; }
+
+  /* ── Typography ── */
+  .t-hero { font-size: 48px; font-weight: 800; line-height: 1.2; letter-spacing: -1px; color: #fff; }
+  .t-lg   { font-size: 36px; font-weight: 800; line-height: 1.25; letter-spacing: -0.5px; }
+  .t-lead { font-size: 18px; font-weight: 500; line-height: 1.6; color: var(--sub); }
+  .t-cap  { font-size: 14px; font-weight: 500; color: var(--sub); }
+
+  .badge {
+    display: inline-block; padding: 6px 14px; border-radius: 999px;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
+    background: rgba(79, 70, 229, 0.1); color: var(--primary);
+    margin-bottom: 16px;
+  }
+
+  /* ── Hero slide ── */
+  .slide-hero {
+    background: linear-gradient(135deg, #111827, #4f46e5);
+    border-radius: 0;
+  }
+  .slide-hero .badge { background: rgba(255,255,255,0.14); color: #fff; }
+  .slide-hero .t-lead { color: rgba(255,255,255,0.75); }
+
+  /* ── Content slides ── */
+  .slide-light { background: var(--bg); }
+  .slide-white { background: var(--surface); }
+
+  /* ── Buttons ── */
+  .btn {
+    display: inline-block; padding: 14px 28px; border-radius: 999px;
+    font-size: 15px; font-weight: 700; text-decoration: none; border: none;
+    cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-primary { background: #fff; color: var(--accent); }
+  .btn-outline { background: transparent; color: var(--primary); border: 1.5px solid var(--primary); }
+  .btn-dark { background: var(--accent); color: #fff; }
+
+  /* ── Feature cards ── */
+  .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 1080px; margin: 0 auto; }
+  .feat {
+    padding: 28px; border-radius: 22px; text-align: left;
+    background: var(--surface); border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    transition: transform 0.2s;
+  }
+  .feat:hover { transform: translateY(-3px); }
+  .feat.feat-new { border-color: rgba(79,70,229,0.3); background: linear-gradient(135deg, #fff 80%, rgba(79,70,229,0.04)); }
+  .feat-icon {
+    width: 46px; height: 46px; border-radius: 13px; margin-bottom: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; background: rgba(79,70,229,0.08); color: var(--primary);
+  }
+  .feat-new .feat-icon { background: rgba(79,70,229,0.07); }
+  .feat-ver.v33 ~ .feat-icon { background: rgba(16,185,129,0.08); color: #059669; }
+  .feat-title { font-size: 16px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+  .feat-desc { font-size: 14px; line-height: 1.6; color: var(--sub); }
+  .feat-ver {
+    display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px;
+    border-radius: 6px; background: rgba(79,70,229,0.1); color: var(--primary);
+    margin-bottom: 10px;
+  }
+  .feat-ver.v33 { background: rgba(16,185,129,0.1); color: #059669; }
+
+  /* ── Version timeline ── */
+  .timeline { display: flex; gap: 0; max-width: 900px; margin: 48px auto 0; }
+  .tl-step {
+    flex: 1; text-align: center; position: relative; padding: 20px 12px;
+    background: var(--surface); border: 1px solid var(--line); border-radius: 18px;
+    margin: 0 8px;
+  }
+  .tl-step .tl-ver { font-size: 20px; font-weight: 800; color: var(--primary); margin-bottom: 8px; }
+  .tl-step .tl-items { font-size: 13px; color: var(--sub); line-height: 2; text-align: left; padding-left: 4px; }
+  .tl-step .tl-items i { color: var(--primary); opacity: 0.6; font-size: 11px; }
+  .tl-step.active .tl-items i { color: #059669; opacity: 0.8; }
+  .tl-step.active { border-color: var(--primary); background: rgba(79,70,229,0.04); }
+  .tl-step.active .tl-ver { color: #059669; }
+
+  /* ── URL table ── */
+  .url-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1080px; margin: 0 auto; text-align: left; }
+  .grp { margin-bottom: 32px; }
+  .grp-t {
+    font-size: 16px; font-weight: 700; margin-bottom: 12px; padding: 8px 14px;
+    background: var(--surface); border-radius: 12px; border: 1px solid var(--line);
+    display: inline-block;
+  }
+  .tbl { width: 100%; border-collapse: collapse; }
+  .tbl td { padding: 10px 12px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: middle; color: var(--text); }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl td:last-child { color: var(--sub); }
+  code {
+    font-family: "JetBrains Mono", "Menlo", monospace; font-size: 13px;
+    background: var(--surface-2); color: var(--primary-dark);
+    padding: 3px 8px; border-radius: 8px;
+  }
+  .mth {
+    display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.4px;
+    padding: 3px 7px; border-radius: 6px; min-width: 34px; text-align: center;
+  }
+  .m-g { background: rgba(16,185,129,.1); color: #059669; }
+  .m-p { background: rgba(79,70,229,.08); color: var(--primary); }
+  .m-new {
+    display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 2px 7px; border-radius: 6px;
+    background: rgba(220,38,38,.08); color: var(--danger); margin-left: 6px; vertical-align: middle;
+  }
+  .m-v33 {
+    display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 0.5px;
+    padding: 2px 7px; border-radius: 6px;
+    background: rgba(16,185,129,.1); color: #059669; margin-left: 6px; vertical-align: middle;
+  }
+  tr.row-new td { background: rgba(220,38,38,.03); }
+  tr.row-v33 td { background: rgba(16,185,129,.03); }
+
+  /* ── ERD ── */
+  .erd-wrap { max-width: 1200px; margin: 0 auto; overflow-x: auto; }
+  .erd-wrap svg { display: block; margin: 0 auto; width: 100%; height: auto; }
+
+  /* ── Nav dots ── */
+  .dots {
+    position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+    display: flex; flex-direction: column; gap: 8px; z-index: 100;
+    background: rgba(255,255,255,0.8); backdrop-filter: blur(8px);
+    padding: 10px 6px; border-radius: 999px; border: 1px solid var(--line);
+  }
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--line);
+    border: none; cursor: pointer; padding: 0; transition: all 0.3s;
+  }
+  .dot:hover, .dot.on { background: var(--primary); transform: scale(1.4); }
+  .dots.on-dark { background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.1); }
+  .dots.on-dark .dot:not(.on) { background: rgba(255,255,255,0.3); }
+
+  @media(max-width:834px) {
+    .t-hero { font-size: 36px; } .t-lg { font-size: 28px; }
+    .feat-grid { grid-template-columns: 1fr; } .url-wrap { grid-template-columns: 1fr; }
+    .timeline { flex-direction: column; }
+    .slide { padding: 48px 16px; } .dots { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="dots" id="dots"></nav>
+
+<!-- ===== 1. TITLE ===== -->
+<section class="slide slide-hero" id="s1" data-theme="dark">
+  <div class="inner">
+    <p class="badge">Team Project · dev3.3</p>
+    <h1 class="t-hero">BOOK FOREST</h1>
+    <p class="t-lead" style="margin-top:28px;">Spring MVC 기반 온라인 도서 쇼핑몰</p>
+    <p class="t-lead" style="margin-top:8px;font-weight:400;">Spring Security &middot; H2 Database &middot; JSP &middot; WebSocket &middot; Kakao API &middot; Google reCAPTCHA</p>
+    <div style="margin-top:48px;"><a href="#s2" class="btn btn-primary">Start</a></div>
+  </div>
+</section>
+
+<!-- ===== 2. VERSION HISTORY ===== -->
+<section class="slide slide-light" id="s2">
+  <div class="inner">
+    <p class="badge">버전 히스토리</p>
+    <h2 class="t-lg">dev3.0 → dev3.3</h2>
+    <p class="t-lead" style="margin-top:12px;">단계별 기능 통합 과정</p>
+
+    <div class="timeline">
+      <div class="tl-step">
+        <div class="tl-ver">dev3.0</div>
+        <div class="tl-items">
+          <i class="fa-solid fa-paper-plane fa-fw"></i> Email OTP 인증<br>
+          <i class="fa-solid fa-medal fa-fw"></i> 회원 등급 시스템<br>
+          <i class="fa-solid fa-coins fa-fw"></i> 마일리지 적립·사용<br>
+          <i class="fa-solid fa-location-dot fa-fw"></i> 배송지 자동 저장<br>
+          <i class="fa-solid fa-shield-halved fa-fw"></i> Admin / Tracking 권한<br>
+          <i class="fa-solid fa-barcode fa-fw"></i> 카카오 ISBN 조회<br>
+          <i class="fa-solid fa-right-to-bracket fa-fw"></i> 카카오 소셜 로그인<br>
+          <i class="fa-solid fa-cart-shopping fa-fw"></i> 비회원 장바구니<br>
+          <i class="fa-solid fa-comments fa-fw"></i> 실시간 1:1 채팅
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-ver">dev3.1</div>
+        <div class="tl-items">
+          <i class="fa-solid fa-tag fa-fw"></i> 도서 할인율 시스템<br>
+          <i class="fa-solid fa-magnifying-glass fa-fw"></i> 도서 검색 기능<br>
+          <i class="fa-solid fa-star fa-fw"></i> 좋아요 / 별점<br>
+          <i class="fa-solid fa-bullhorn fa-fw"></i> 광고 도서 사이드바<br>
+          <i class="fa-solid fa-chart-line fa-fw"></i> 관리자 매출 통계<br>
+          <i class="fa-solid fa-users fa-fw"></i> 회원 관리 기능
+        </div>
+      </div>
+      <div class="tl-step">
+        <div class="tl-ver">dev3.2</div>
+        <div class="tl-items">
+          <i class="fa-solid fa-star fa-fw"></i> 별점 미선택 방지<br>
+          <i class="fa-solid fa-user-lock fa-fw"></i> 회원 탈퇴 비밀번호 인증<br>
+          <i class="fa-solid fa-magnifying-glass fa-fw"></i> 관리자 회원 검색<br>
+          <i class="fa-solid fa-wrench fa-fw"></i> Lombok JDK24 빌드 수정
+        </div>
+      </div>
+      <div class="tl-step active">
+        <div class="tl-ver">dev3.3</div>
+        <div class="tl-items">
+          <i class="fa-solid fa-robot fa-fw"></i> reCAPTCHA 자동가입 방지<br>
+          <i class="fa-solid fa-circle-check fa-fw"></i> 아이디 중복 확인 강제화<br>
+          <i class="fa-solid fa-code-merge fa-fw"></i> feature/register-id-check<br>
+          <i class="fa-solid fa-code-merge fa-fw"></i> feature-reCAPTCHA 통합
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 3. ALL FEATURES ===== -->
+<section class="slide slide-white" id="s3">
+  <div class="inner">
+    <p class="badge">Features</p>
+    <h2 class="t-lg">전체 기능 목록</h2>
+    <p class="t-lead" style="margin-top:12px;">dev3.3 기준 통합 기능</p>
+
+    <div class="feat-grid" style="margin-top:48px;">
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-paper-plane"></i></span>
+        <div class="feat-title">Email OTP 인증</div>
+        <div class="feat-desc">Gmail SMTP로 6자리 OTP 발송. 3분 유효시간 내 인증 완료 시 가입 가능.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-medal"></i></span>
+        <div class="feat-title">회원 등급 시스템</div>
+        <div class="feat-desc">BRONZE(1%) → SILVER(2%) → GOLD(3%) → PLATINUM(5%). 누적 마일리지 기준 자동 승급.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-coins"></i></span>
+        <div class="feat-title">마일리지 적립 & 사용</div>
+        <div class="feat-desc">등급별 적립률 기반 마일리지 적립. 주문 시 보유 마일리지로 결제 차감.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-location-dot"></i></span>
+        <div class="feat-title">배송지 자동 저장</div>
+        <div class="feat-desc">첫 주문 후 받는사람/연락처/주소 DB 저장. 다음 주문 시 자동 입력.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        <div class="feat-title">Admin / Tracking 권한 분리</div>
+        <div class="feat-desc">ROLE_ADMIN: 도서 CRUD, 매출, 회원관리. ROLE_TRAKING: 배송 전담.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-barcode"></i></span>
+        <div class="feat-title">카카오 ISBN 자동조회</div>
+        <div class="feat-desc">ISBN 입력으로 카카오 API에서 도서명/저자/출판사/표지/가격 자동 입력.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-right-to-bracket"></i></span>
+        <div class="feat-title">카카오 소셜 로그인</div>
+        <div class="feat-desc">카카오 OAuth2 연동 간편 로그인. 자동 회원가입 및 세션 연동.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-cart-shopping"></i></span>
+        <div class="feat-title">비회원 장바구니</div>
+        <div class="feat-desc">쿠키 기반 비회원 장바구니. 7일 유지, 로그인 없이 주문 가능.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.0</span>
+        <span class="feat-icon"><i class="fa-solid fa-comments"></i></span>
+        <div class="feat-title">실시간 1:1 채팅</div>
+        <div class="feat-desc">WebSocket 기반 사용자-관리자 1:1 상담. 채팅 이력 DB 저장.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.1</span>
+        <span class="feat-icon"><i class="fa-solid fa-tag"></i></span>
+        <div class="feat-title">도서 할인율 시스템</div>
+        <div class="feat-desc">관리자가 도서별 할인율(0~99%) 설정. 정가/할인가 자동 계산 및 뱃지 표시.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.1</span>
+        <span class="feat-icon"><i class="fa-solid fa-bullhorn"></i></span>
+        <div class="feat-title">광고 도서 사이드바</div>
+        <div class="feat-desc">관리자가 광고 도서 지정. 도서 목록 우측 사이드바에 광고 도서 노출.</div>
+      </div>
+      <div class="feat">
+        <span class="feat-ver">dev3.1</span>
+        <span class="feat-icon"><i class="fa-solid fa-chart-line"></i></span>
+        <div class="feat-title">관리자 매출 통계</div>
+        <div class="feat-desc">일/주/월/연도별 매출 차트, 인기 도서 TOP5, 오늘 매출 실시간 집계.</div>
+      </div>
+      <div class="feat feat-new">
+        <span class="feat-ver">dev3.2</span>
+        <span class="feat-icon"><i class="fa-solid fa-star"></i></span>
+        <div class="feat-title">별점 유효성 검사</div>
+        <div class="feat-desc">별점 미선택 상태로 저장 버튼 클릭 시 클라이언트에서 차단. 400 에러 방지.</div>
+      </div>
+      <div class="feat feat-new">
+        <span class="feat-ver">dev3.2</span>
+        <span class="feat-icon"><i class="fa-solid fa-user-lock"></i></span>
+        <div class="feat-title">회원 탈퇴 비밀번호 인증</div>
+        <div class="feat-desc">탈퇴 전 비밀번호 재확인. 카카오 간편가입 계정은 비밀번호 검증 예외 처리.</div>
+      </div>
+      <div class="feat feat-new">
+        <span class="feat-ver v33">dev3.3</span>
+        <span class="feat-icon"><i class="fa-solid fa-robot"></i></span>
+        <div class="feat-title">reCAPTCHA 자동 가입 방지</div>
+        <div class="feat-desc">Google reCAPTCHA v2 연동. OTP 발송 전 캡차 인증 필수. 서버에서 토큰 이중 검증.</div>
+      </div>
+      <div class="feat feat-new">
+        <span class="feat-ver v33">dev3.3</span>
+        <span class="feat-icon"><i class="fa-solid fa-circle-check"></i></span>
+        <div class="feat-title">아이디 중복 확인 강제화</div>
+        <div class="feat-desc">회원가입 시 중복 확인 미완료 상태에서 가입 버튼 비활성화. 중복 ID 가입 원천 차단.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 4. URL MAP ===== -->
+<section class="slide slide-light" id="s4">
+  <div class="inner">
+    <p class="badge">URL Map</p>
+    <h2 class="t-lg">URL 구조</h2>
+    <p class="t-lead" style="margin-top:12px;">dev3.3 기준 전체 엔드포인트</p>
+
+    <div class="url-wrap" style="margin-top:48px;">
+      <div>
+        <div class="grp">
+          <div class="grp-t">Member</div>
+          <table class="tbl">
+            <tr><td><span class="mth m-g">GET</span></td><td><code>/member/login</code></td><td>로그인</td></tr>
+            <tr><td><span class="mth m-p">POST</span></td><td><code>/member/login</code></td><td>AJAX 로그인</td></tr>
+            <tr><td><span class="mth m-g">GET</span></td><td><code>/member/register</code></td><td>회원가입</td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/member/checkId</code></td><td>아이디 중복확인 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/member/sendOtp</code></td><td>OTP 발송 + 캡차검증 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/member/verifyOtp</code></td><td>OTP 인증 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/member/kakaoStart</code></td><td>카카오 로그인 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/member/profile</code></td><td>마이페이지 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/member/withdraw</code></td><td>회원 탈퇴 <span class="m-new">NEW</span></td></tr>
+          </table>
+        </div>
+        <div class="grp">
+          <div class="grp-t">Book</div>
+          <table class="tbl">
+            <tr><td><span class="mth m-g">GET</span></td><td><code>/book/list</code></td><td>도서 목록</td></tr>
+            <tr><td><span class="mth m-g">GET</span></td><td><code>/book/list/ajax</code></td><td>무한스크롤</td></tr>
+            <tr><td><span class="mth m-g">GET</span></td><td><code>/book/view?isbn=</code></td><td>도서 상세</td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/book/search</code></td><td>도서 검색 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/book/ads</code></td><td>광고 도서 목록 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/book/like</code></td><td>좋아요 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/book/rate</code></td><td>별점 저장 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/book/rate/cancel</code></td><td>별점 취소 <span class="m-new">NEW</span></td></tr>
+          </table>
+        </div>
+        <div class="grp">
+          <div class="grp-t">Search</div>
+          <table class="tbl">
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/search/popular</code></td><td>인기 검색어 <span class="m-new">NEW</span></td></tr>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="grp">
+          <div class="grp-t">Cart & Order</div>
+          <table class="tbl">
+            <tr><td><span class="mth m-g">GET</span></td><td><code>/cart/list</code></td><td>장바구니</td></tr>
+            <tr><td><span class="mth m-p">POST</span></td><td><code>/cart/insert</code></td><td>추가</td></tr>
+            <tr><td><span class="mth m-p">POST</span></td><td><code>/cart/update</code></td><td>수량 변경</td></tr>
+            <tr><td><span class="mth m-p">POST</span></td><td><code>/cart/delete</code></td><td>삭제</td></tr>
+            <tr><td><span class="mth m-g">GET</span></td><td><code>/order/checkout</code></td><td>주문/결제</td></tr>
+            <tr><td><span class="mth m-p">POST</span></td><td><code>/order/pay</code></td><td>결제 처리</td></tr>
+            <tr><td><span class="mth m-g">GET</span></td><td><code>/order/list</code></td><td>주문내역</td></tr>
+          </table>
+        </div>
+        <div class="grp">
+          <div class="grp-t">Admin <span class="t-cap">ROLE_ADMIN</span></div>
+          <table class="tbl">
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/admin/insertform</code></td><td>도서 등록 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/admin/updateform</code></td><td>도서 수정 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/admin/kakaoBookSearch</code></td><td>ISBN API <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/admin/sales</code></td><td>매출 통계 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/admin/members</code></td><td>회원 관리 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/admin/updateDiscount</code></td><td>할인율 설정 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/admin/updateAd</code></td><td>광고 설정 <span class="m-new">NEW</span></td></tr>
+          </table>
+        </div>
+        <div class="grp">
+          <div class="grp-t">Tracking <span class="t-cap">ROLE_TRAKING</span></div>
+          <table class="tbl">
+            <tr class="row-new"><td><span class="mth m-g">GET</span></td><td><code>/admin/traking</code></td><td>배송 관리 <span class="m-new">NEW</span></td></tr>
+            <tr class="row-new"><td><span class="mth m-p">POST</span></td><td><code>/admin/updateTracking</code></td><td>상태 변경 <span class="m-new">NEW</span></td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 5. ERD ===== -->
+<section class="slide slide-white" id="s5" style="min-height:auto;padding-top:80px;padding-bottom:80px;">
+  <div class="inner" style="max-width:1200px;">
+    <p class="badge">Database</p>
+    <h2 class="t-lg">ERD</h2>
+    <p class="t-lead" style="margin-top:12px;">H2 Database 테이블 관계도</p>
+    <p class="t-cap" style="margin-top:10px;">
+      <span style="color:#b8860b;">&#9632;</span> PK &nbsp;&nbsp;
+      <span style="color:#059669;">&#9632;</span> FK &nbsp;&nbsp;
+      <span style="color:var(--primary);">&#9632;</span> dev3.1+ 추가 컬럼
+    </p>
+    <div class="erd-wrap" style="margin-top:40px;">
+      <svg viewBox="0 0 960 740" xmlns="http://www.w3.org/2000/svg" font-family="Pretendard, Noto Sans KR, sans-serif" font-size="12">
+        <!-- Relation lines -->
+        <line x1="200" y1="270" x2="355" y2="145" stroke="#d1d5db" stroke-width="1.2"/>
+        <text x="255" y="196" fill="#9ca3af" font-size="10" font-weight="600">1 : N</text>
+        <line x1="200" y1="340" x2="355" y2="460" stroke="#d1d5db" stroke-width="1.2"/>
+        <text x="250" y="415" fill="#9ca3af" font-size="10" font-weight="600">1 : N</text>
+        <line x1="710" y1="270" x2="555" y2="145" stroke="#d1d5db" stroke-width="1.2"/>
+        <text x="635" y="196" fill="#9ca3af" font-size="10" font-weight="600">1 : N</text>
+        <line x1="710" y1="340" x2="555" y2="460" stroke="#d1d5db" stroke-width="1.2"/>
+        <text x="640" y="415" fill="#9ca3af" font-size="10" font-weight="600">1 : N</text>
+        <line x1="830" y1="230" x2="830" y2="145" stroke="#d1d5db" stroke-width="1.2"/>
+        <line x1="830" y1="398" x2="830" y2="460" stroke="#d1d5db" stroke-width="1.2"/>
+        <line x1="100" y1="230" x2="100" y2="145" stroke="#d1d5db" stroke-width="1.2"/>
+        <line x1="200" y1="640" x2="555" y2="640" stroke="#d1d5db" stroke-width="1.2"/>
+        <text x="340" y="632" fill="#9ca3af" font-size="10" font-weight="600">1 : N (CASCADE)</text>
+
+        <!-- chat_message -->
+        <rect x="10" y="30" width="190" height="110" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="10" y="30" width="190" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="10" y="46" width="190" height="12" fill="#fff"/>
+        <text x="105" y="50" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">chat_message</text>
+        <text x="20" y="76" fill="#b8860b" font-size="11">PK message_id INT</text>
+        <text x="20" y="92" fill="#6b7280" font-size="11">room_id VARCHAR(100)</text>
+        <text x="20" y="108" fill="#6b7280" font-size="11">sender VARCHAR(100)</text>
+        <text x="20" y="124" fill="#6b7280" font-size="11">content, sent_at, is_admin</text>
+
+        <!-- member -->
+        <rect x="10" y="230" width="190" height="210" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="10" y="230" width="190" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="10" y="246" width="190" height="12" fill="#fff"/>
+        <text x="105" y="250" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">member</text>
+        <text x="20" y="276" fill="#b8860b" font-size="11">PK num INT</text>
+        <text x="20" y="292" fill="#6b7280" font-size="11">id VARCHAR(100) UNIQUE</text>
+        <text x="20" y="308" fill="#6b7280" font-size="11">pw, email, hp, nickname</text>
+        <text x="20" y="324" fill="#6b7280" font-size="11">role VARCHAR(50)</text>
+        <text x="20" y="344" fill="#4f46e5" font-size="11">default_receiver</text>
+        <text x="20" y="360" fill="#4f46e5" font-size="11">default_phone, default_address</text>
+        <text x="20" y="376" fill="#4f46e5" font-size="11">mileage, total_mileage</text>
+        <text x="20" y="392" fill="#4f46e5" font-size="11">grade VARCHAR(30)</text>
+        <text x="20" y="408" fill="#4f46e5" font-size="11">kakao_id VARCHAR(100)</text>
+
+        <!-- cart -->
+        <rect x="355" y="30" width="200" height="110" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="355" y="30" width="200" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="355" y="46" width="200" height="12" fill="#fff"/>
+        <text x="455" y="50" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">cart</text>
+        <text x="365" y="76" fill="#b8860b" font-size="11">PK cart_id INT</text>
+        <text x="365" y="92" fill="#059669" font-size="11">FK userid → member.id</text>
+        <text x="365" y="108" fill="#059669" font-size="11">FK isbn → book.isbn</text>
+        <text x="365" y="124" fill="#6b7280" font-size="11">amount INT</text>
+
+        <!-- book -->
+        <rect x="710" y="230" width="240" height="168" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="710" y="230" width="240" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="710" y="246" width="240" height="12" fill="#fff"/>
+        <text x="830" y="250" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">book</text>
+        <text x="720" y="276" fill="#b8860b" font-size="11">PK isbn BIGINT</text>
+        <text x="720" y="292" fill="#6b7280" font-size="11">bookname VARCHAR(500)</text>
+        <text x="720" y="308" fill="#6b7280" font-size="11">author VARCHAR(300)</text>
+        <text x="720" y="324" fill="#6b7280" font-size="11">publisher VARCHAR(300)</text>
+        <text x="720" y="340" fill="#6b7280" font-size="11">image, price, category</text>
+        <text x="720" y="358" fill="#4f46e5" font-size="11">discount_rate INT</text>
+        <text x="720" y="374" fill="#4f46e5" font-size="11">is_ad BOOLEAN</text>
+
+        <!-- book_like -->
+        <rect x="740" y="30" width="210" height="110" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="740" y="30" width="210" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="740" y="46" width="210" height="12" fill="#fff"/>
+        <text x="845" y="50" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">book_like</text>
+        <text x="750" y="76" fill="#b8860b" font-size="11">PK like_id INT</text>
+        <text x="750" y="92" fill="#059669" font-size="11">FK isbn → book.isbn</text>
+        <text x="750" y="108" fill="#059669" font-size="11">FK userid → member.id</text>
+        <text x="750" y="124" fill="#6b7280" font-size="11">UNIQUE (isbn, userid)</text>
+
+        <!-- orders -->
+        <rect x="355" y="440" width="200" height="200" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="355" y="440" width="200" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="355" y="456" width="200" height="12" fill="#fff"/>
+        <text x="455" y="460" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">orders</text>
+        <text x="365" y="486" fill="#b8860b" font-size="11">PK order_id INT</text>
+        <text x="365" y="502" fill="#059669" font-size="11">FK userid → member.id</text>
+        <text x="365" y="518" fill="#059669" font-size="11">FK isbn → book.isbn</text>
+        <text x="365" y="534" fill="#6b7280" font-size="11">bookname, price, amount</text>
+        <text x="365" y="550" fill="#6b7280" font-size="11">total_price, receiver</text>
+        <text x="365" y="566" fill="#6b7280" font-size="11">phone, address, order_date</text>
+        <text x="365" y="582" fill="#6b7280" font-size="11">status, traking_status</text>
+        <text x="365" y="602" fill="#4f46e5" font-size="11">used_mileage</text>
+        <text x="365" y="618" fill="#4f46e5" font-size="11">earned_mileage, final_payment</text>
+
+        <!-- book_rating -->
+        <rect x="740" y="460" width="210" height="126" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="740" y="460" width="210" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="740" y="476" width="210" height="12" fill="#fff"/>
+        <text x="845" y="480" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">book_rating</text>
+        <text x="750" y="506" fill="#b8860b" font-size="11">PK rating_id INT</text>
+        <text x="750" y="522" fill="#059669" font-size="11">FK isbn → book.isbn</text>
+        <text x="750" y="538" fill="#059669" font-size="11">FK userid → member.id</text>
+        <text x="750" y="554" fill="#6b7280" font-size="11">rating INT</text>
+        <text x="750" y="570" fill="#6b7280" font-size="11">UNIQUE (isbn, userid)</text>
+
+        <!-- qna_question -->
+        <rect x="10" y="600" width="200" height="110" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="10" y="600" width="200" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="10" y="616" width="200" height="12" fill="#fff"/>
+        <text x="110" y="620" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">qna_question</text>
+        <text x="20" y="646" fill="#b8860b" font-size="11">PK question_id INT</text>
+        <text x="20" y="662" fill="#6b7280" font-size="11">userid, subject, content</text>
+        <text x="20" y="678" fill="#6b7280" font-size="11">status, created_at</text>
+        <text x="20" y="694" fill="#6b7280" font-size="11">updated_at</text>
+
+        <!-- qna_answer -->
+        <rect x="555" y="600" width="200" height="110" rx="14" fill="#fff" stroke="#e5e7eb"/>
+        <rect x="555" y="600" width="200" height="28" rx="14" fill="rgba(79,70,229,.06)"/>
+        <rect x="555" y="616" width="200" height="12" fill="#fff"/>
+        <text x="655" y="620" fill="#4f46e5" font-weight="700" font-size="13" text-anchor="middle">qna_answer</text>
+        <text x="565" y="646" fill="#b8860b" font-size="11">PK answer_id INT</text>
+        <text x="565" y="662" fill="#059669" font-size="11">FK question_id → CASCADE</text>
+        <text x="565" y="678" fill="#6b7280" font-size="11">writer, content</text>
+        <text x="565" y="694" fill="#6b7280" font-size="11">is_admin, created_at</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 6. GIT STRATEGY ===== -->
+<section class="slide slide-light" id="s6">
+  <div class="inner" style="max-width:1080px;">
+    <p class="badge">Git Strategy</p>
+    <h2 class="t-lg">브랜치 전략</h2>
+    <p class="t-lead" style="margin-top:12px;">Feature Branch → 통합 Dev → Main 배포</p>
+
+    <!-- Lane Diagram -->
+    <div style="margin-top:44px; overflow-x:auto;">
+      <svg viewBox="0 0 960 330" xmlns="http://www.w3.org/2000/svg"
+           font-family="Pretendard, Noto Sans KR, sans-serif" font-size="12"
+           style="width:100%;max-width:960px;display:block;margin:0 auto;">
+
+        <!-- Lane backgrounds -->
+        <rect x="0" y="0"   width="960" height="95"  fill="rgba(15,23,42,0.03)"/>
+        <rect x="0" y="95"  width="960" height="105" fill="rgba(79,70,229,0.03)"/>
+        <rect x="0" y="200" width="960" height="130" fill="rgba(156,163,175,0.06)"/>
+
+        <!-- Lane labels -->
+        <text x="14" y="50"  fill="#111827" font-weight="700" font-size="13">main</text>
+        <text x="14" y="66"  fill="#6b7280" font-size="10">배포 브랜치</text>
+        <text x="14" y="148" fill="#4f46e5" font-weight="700" font-size="13">dev3.x</text>
+        <text x="14" y="164" fill="#6b7280" font-size="10">통합 개발</text>
+        <text x="14" y="238" fill="#9ca3af" font-weight="700" font-size="13">feature/*</text>
+        <text x="14" y="254" fill="#6b7280" font-size="10">기능 개발</text>
+
+        <!-- Lane separator lines -->
+        <line x1="0" y1="95"  x2="960" y2="95"  stroke="#e5e7eb" stroke-width="1"/>
+        <line x1="0" y1="200" x2="960" y2="200" stroke="#e5e7eb" stroke-width="1"/>
+
+        <!-- Left divider -->
+        <line x1="90" y1="0" x2="90" y2="330" stroke="#e5e7eb" stroke-width="1.5" stroke-dasharray="4,3"/>
+
+        <!-- ── MAIN LINE ── -->
+        <line x1="100" y1="48" x2="920" y2="48" stroke="#111827" stroke-width="3" stroke-linecap="round"/>
+        <polygon points="920,48 908,42 908,54" fill="#111827"/>
+
+        <!-- main: initial commit -->
+        <circle cx="128" cy="48" r="5" fill="#111827"/>
+
+        <!-- main merge 1: from dev3.0 → x=250 -->
+        <circle cx="250" cy="48" r="7" fill="#111827" stroke="#fff" stroke-width="2"/>
+        <text x="250" y="30" fill="#374151" font-size="9" font-weight="700" text-anchor="middle">v3.0</text>
+        <text x="250" y="20" fill="#6b7280" font-size="8" text-anchor="middle">merge</text>
+
+        <!-- main merge 2: from dev3.1 → x=430 -->
+        <circle cx="430" cy="48" r="7" fill="#111827" stroke="#fff" stroke-width="2"/>
+        <text x="430" y="30" fill="#374151" font-size="9" font-weight="700" text-anchor="middle">v3.1</text>
+        <text x="430" y="20" fill="#6b7280" font-size="8" text-anchor="middle">merge</text>
+
+        <!-- main merge 3: from dev3.2 → x=620 -->
+        <circle cx="620" cy="48" r="7" fill="#111827" stroke="#fff" stroke-width="2"/>
+        <text x="620" y="30" fill="#374151" font-size="9" font-weight="700" text-anchor="middle">v3.2</text>
+        <text x="620" y="20" fill="#6b7280" font-size="8" text-anchor="middle">merge</text>
+
+        <!-- ── DEV LINE ── -->
+        <line x1="100" y1="148" x2="840" y2="148" stroke="#4f46e5" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="840,148 828,142 828,154" fill="#4f46e5"/>
+
+        <!-- dev3.0 → x=185 -->
+        <circle cx="185" cy="148" r="7" fill="#4f46e5" stroke="#fff" stroke-width="2"/>
+        <text x="185" y="130" fill="#4f46e5" font-size="11" font-weight="700" text-anchor="middle">dev3.0</text>
+
+        <!-- test node on dev line after dev3.0, before merge → x=228 -->
+        <polygon points="228,139 237,148 228,157 219,148" fill="#059669"/>
+        <text x="228" y="170" fill="#059669" font-size="9" font-weight="700" text-anchor="middle">Test ✓</text>
+        <text x="228" y="181" fill="#059669" font-size="8" text-anchor="middle">통합 테스트</text>
+
+        <!-- dev3.1 → x=365 -->
+        <circle cx="365" cy="148" r="7" fill="#4f46e5" stroke="#fff" stroke-width="2"/>
+        <text x="365" y="130" fill="#4f46e5" font-size="11" font-weight="700" text-anchor="middle">dev3.1</text>
+        <polygon points="398,139 407,148 398,157 389,148" fill="#059669"/>
+        <text x="398" y="170" fill="#059669" font-size="9" font-weight="700" text-anchor="middle">Test ✓</text>
+        <text x="398" y="181" fill="#059669" font-size="8" text-anchor="middle">통합 테스트</text>
+
+        <!-- dev3.2 → x=555 -->
+        <circle cx="555" cy="148" r="7" fill="#4f46e5" stroke="#fff" stroke-width="2"/>
+        <text x="555" y="130" fill="#4f46e5" font-size="11" font-weight="700" text-anchor="middle">dev3.2</text>
+        <polygon points="588,139 597,148 588,157 579,148" fill="#059669"/>
+        <text x="588" y="170" fill="#059669" font-size="9" font-weight="700" text-anchor="middle">Test ✓</text>
+        <text x="588" y="181" fill="#059669" font-size="8" text-anchor="middle">통합 테스트</text>
+
+        <!-- dev3.3 → x=760 (HEAD) -->
+        <circle cx="760" cy="148" r="9" fill="#4f46e5" stroke="#c7d2fe" stroke-width="3"/>
+        <text x="760" y="130" fill="#4f46e5" font-size="11" font-weight="700" text-anchor="middle">dev3.3</text>
+        <text x="760" y="119" fill="#059669" font-size="9" font-weight="700" text-anchor="middle">HEAD</text>
+        <polygon points="800,139 809,148 800,157 791,148" fill="#059669"/>
+        <text x="800" y="170" fill="#059669" font-size="9" font-weight="700" text-anchor="middle">Test ✓</text>
+        <text x="800" y="181" fill="#059669" font-size="8" text-anchor="middle">통합 테스트</text>
+
+        <!-- ── DEV → MAIN merge arrows (dashed) ── -->
+        <!-- dev3.0 → main at x=250 (from test node) -->
+        <line x1="237" y1="148" x2="250" y2="56" stroke="#374151" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="250,56 244,66 256,66" fill="#374151"/>
+
+        <!-- dev3.1 → main at x=430 (from test node) -->
+        <line x1="407" y1="148" x2="430" y2="56" stroke="#374151" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="430,56 424,66 436,66" fill="#374151"/>
+
+        <!-- dev3.2 → main at x=620 (from test node) -->
+        <line x1="597" y1="148" x2="620" y2="56" stroke="#374151" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <polygon points="620,56 614,66 626,66" fill="#374151"/>
+
+        <!-- ── FEATURE → dev3.0 ── -->
+        <line x1="155" y1="210" x2="185" y2="155" stroke="#9ca3af" stroke-width="1.5"/>
+        <polygon points="185,155 179,164 191,164" fill="#9ca3af"/>
+        <line x1="220" y1="210" x2="185" y2="155" stroke="#9ca3af" stroke-width="1.5"/>
+        <text x="138" y="222" fill="#6b7280" font-size="9" text-anchor="middle">order</text>
+        <text x="138" y="232" fill="#6b7280" font-size="9" text-anchor="middle">-mileage</text>
+        <text x="228" y="222" fill="#6b7280" font-size="9" text-anchor="middle">feature</text>
+        <text x="228" y="232" fill="#6b7280" font-size="9" text-anchor="middle">-tracking2</text>
+
+        <!-- ── FEATURE → dev3.1 ── -->
+        <line x1="340" y1="210" x2="365" y2="155" stroke="#9ca3af" stroke-width="1.5"/>
+        <polygon points="365,155 359,164 371,164" fill="#9ca3af"/>
+        <line x1="395" y1="210" x2="365" y2="155" stroke="#9ca3af" stroke-width="1.5"/>
+        <text x="325" y="222" fill="#6b7280" font-size="9" text-anchor="middle">feature</text>
+        <text x="325" y="232" fill="#6b7280" font-size="9" text-anchor="middle">_Search_bar</text>
+        <text x="410" y="222" fill="#6b7280" font-size="9" text-anchor="middle">kakao</text>
+        <text x="410" y="232" fill="#6b7280" font-size="9" text-anchor="middle">_book_api</text>
+
+        <!-- ── FEATURE → dev3.2 ── -->
+        <line x1="500" y1="210" x2="555" y2="155" stroke="#9ca3af" stroke-width="1.5"/>
+        <polygon points="555,155 549,164 561,164" fill="#9ca3af"/>
+        <line x1="528" y1="210" x2="555" y2="155" stroke="#9ca3af" stroke-width="1.5"/>
+        <line x1="560" y1="210" x2="555" y2="155" stroke="#9ca3af" stroke-width="1.5"/>
+        <line x1="598" y1="210" x2="555" y2="155" stroke="#9ca3af" stroke-width="1.5"/>
+        <text x="490" y="222" fill="#6b7280" font-size="9" text-anchor="middle">ad-sidebar</text>
+        <text x="526" y="222" fill="#6b7280" font-size="9" text-anchor="middle">register</text>
+        <text x="526" y="232" fill="#6b7280" font-size="9" text-anchor="middle">-id-check</text>
+        <text x="562" y="222" fill="#6b7280" font-size="9" text-anchor="middle">password</text>
+        <text x="562" y="232" fill="#6b7280" font-size="9" text-anchor="middle">-change</text>
+        <text x="600" y="222" fill="#6b7280" font-size="9" text-anchor="middle">book</text>
+        <text x="600" y="232" fill="#6b7280" font-size="9" text-anchor="middle">_insert</text>
+
+        <!-- ── FEATURE → dev3.3 ── -->
+        <!-- feature-reCAPTCHA -->
+        <line x1="725" y1="210" x2="760" y2="156" stroke="#059669" stroke-width="1.8"/>
+        <polygon points="760,156 754,166 766,166" fill="#059669"/>
+        <text x="716" y="222" fill="#059669" font-size="9" font-weight="600" text-anchor="middle">feature</text>
+        <text x="716" y="232" fill="#059669" font-size="9" font-weight="600" text-anchor="middle">-reCAPTCHA</text>
+
+        <!-- feature/payment-stamp -->
+        <line x1="800" y1="210" x2="760" y2="156" stroke="#059669" stroke-width="1.8"/>
+        <polygon points="760,156 754,166 766,166" fill="#059669"/>
+        <text x="808" y="222" fill="#059669" font-size="9" font-weight="600" text-anchor="middle">payment</text>
+        <text x="808" y="232" fill="#059669" font-size="9" font-weight="600" text-anchor="middle">-stamp</text>
+      </svg>
+    </div>
+
+    <!-- Branch type cards -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:36px;text-align:left;">
+      <div style="padding:20px 22px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;border-top:3px solid #111827;">
+        <div style="font-size:13px;font-weight:800;color:#111827;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-code-branch"></i> main
+        </div>
+        <div style="font-size:13px;color:#6b7280;line-height:1.8;">
+          안정화된 버전만 병합<br>
+          직접 push 금지<br>
+          Pull Request 필수<br>
+          dev3.0 / 3.1 / 3.2 순차 merge 완료
+        </div>
+      </div>
+      <div style="padding:20px 22px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;border-top:3px solid #4f46e5;">
+        <div style="font-size:13px;font-weight:800;color:#4f46e5;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-layer-group"></i> dev3.x
+        </div>
+        <div style="font-size:13px;color:#6b7280;line-height:1.8;">
+          feature/* 통합 브랜치<br>
+          버전별 순차 진행 (3.0→3.3)<br>
+          QA & 버그픽스 수행<br>
+          안정화 완료 시 main으로 PR
+        </div>
+      </div>
+      <div style="padding:20px 22px;background:#fff;border:1px solid #e5e7eb;border-radius:18px;border-top:3px solid #9ca3af;">
+        <div style="font-size:13px;font-weight:800;color:#374151;margin-bottom:10px;display:flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-code-fork"></i> feature/*
+        </div>
+        <div style="font-size:13px;color:#6b7280;line-height:1.8;">
+          기능 단위 독립 개발<br>
+          dev 브랜치에서 분기<br>
+          완성 후 dev로 merge<br>
+          이름 규칙: feature/기능명
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== 7. END ===== -->
+<section class="slide slide-hero" id="s7" data-theme="dark">
+  <div class="inner">
+    <p class="badge">dev3.3 Final</p>
+    <h2 class="t-hero">Thank you.</h2>
+    <p class="t-lead" style="margin-top:32px;">BOOK FOREST</p>
+    <p class="t-lead" style="margin-top:8px;font-weight:400;font-size:15px;">
+      Spring MVC &middot; Spring Security &middot; H2 &middot; WebSocket &middot; Kakao API &middot; reCAPTCHA
+    </p>
+    <div style="margin-top:48px;"><a href="#s1" class="btn btn-primary">Back to Top</a></div>
+  </div>
+</section>
+
+<script>
+const ss = document.querySelectorAll('.slide');
+const dc = document.getElementById('dots');
+ss.forEach(s => {
+  const d = document.createElement('button');
+  d.className = 'dot';
+  d.onclick = () => s.scrollIntoView({ behavior: 'smooth' });
+  dc.appendChild(d);
+});
+const ds = document.querySelectorAll('.dot');
+ss.forEach(s => new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const i = Array.from(ss).indexOf(e.target);
+    ds.forEach((d, j) => d.classList.toggle('on', j === i));
+    dc.classList.toggle('on-dark', e.target.dataset.theme === 'dark');
+  });
+}, { threshold: 0.5 }).observe(s));
+</script>
+</body>
+</html>
